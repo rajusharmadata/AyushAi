@@ -1,10 +1,9 @@
-
-/* Remedies.jsx - Remedies page component for a React.js project, displaying a searchable list of Ayurvedic remedies filtered by dosha. Uses Tailwind CSS for styling. */
-
 import { useState } from "react";
 import RemedyCard from "../components/RemedyCard";
+import { FiSearch, FiHeart, FiClock } from "react-icons/fi";
+import { motion } from "framer-motion";
 
-// Sample data for remedies
+// Enhanced sample data with more details
 const remedies = [
   {
     id: "1",
@@ -15,7 +14,11 @@ const remedies = [
     imageUrl: "/placeholder.svg?height=200&width=400",
     doshas: ["vata", "kapha"],
     likes: 124,
+    duration: "10 mins",
+    difficulty: "Easy",
+    category: "Digestion"
   },
+
   {
     id: "2",
     name: "Ginger Tea",
@@ -25,125 +28,135 @@ const remedies = [
     imageUrl: "/placeholder.svg?height=200&width=400",
     doshas: ["vata", "kapha"],
     likes: 98,
+    duration: "15 mins",
+    difficulty: "Easy",
+    category: "Immunity"
   },
   {
     id: "3",
-    name: "Triphala Mixture",
-    description: "A traditional Ayurvedic formula that supports digestion and detoxification.",
-    ingredients: ["Triphala powder", "Warm water", "Honey"],
-    instructions: "Mix 1 teaspoon of Triphala powder in warm water. Add honey if desired. Drink before bed.",
+    name: "Turmeric Milk (Golden Milk)",
+    description: "A soothing drink that helps reduce inflammation and supports the immune system.",
+    ingredients: ["Turmeric powder", "Milk", "Black pepper", "Honey", "Cinnamon"],
+    instructions: "Heat milk, add turmeric, black pepper, and cinnamon. Simmer for 5 minutes. Add honey to taste.",
     imageUrl: "/placeholder.svg?height=200&width=400",
-    doshas: ["vata", "pitta", "kapha"],
-    likes: 156,
+    doshas: ["vata", "kapha"],
+    likes: 124,
+    duration: "10 mins",
+    difficulty: "Easy",
+    category: "Digestion"
   },
   {
     id: "4",
-    name: "Cooling Cucumber-Mint Drink",
-    description: "A refreshing drink that helps cool Pitta dosha and reduce inflammation.",
-    ingredients: ["Cucumber", "Fresh mint leaves", "Lime juice", "Water", "Honey"],
-    instructions: "Blend cucumber, mint, lime juice, and water. Strain and add honey to taste.",
+    name: "Turmeric Milk (Golden Milk)",
+    description: "A soothing drink that helps reduce inflammation and supports the immune system.",
+    ingredients: ["Turmeric powder", "Milk", "Black pepper", "Honey", "Cinnamon"],
+    instructions: "Heat milk, add turmeric, black pepper, and cinnamon. Simmer for 5 minutes. Add honey to taste.",
     imageUrl: "/placeholder.svg?height=200&width=400",
-    doshas: ["pitta"],
-    likes: 87,
+    doshas: ["vata", "kapha"],
+    likes: 124,
+    duration: "10 mins",
+    difficulty: "Easy",
+    category: "Digestion"
   },
-  {
-    id: "5",
-    name: "Ashwagandha Tea",
-    description: "Helps reduce stress and anxiety while boosting energy and immunity.",
-    ingredients: ["Ashwagandha powder", "Water", "Milk", "Cardamom", "Honey"],
-    instructions:
-      "Simmer ashwagandha in water for 15 minutes. Add milk and cardamom, simmer for 5 more minutes. Add honey.",
-    imageUrl: "/placeholder.svg?height=200&width=400",
-    doshas: ["vata"],
-    likes: 112,
-  },
-  {
-    id: "6",
-    name: "Cumin-Coriander-Fennel Tea",
-    description: "A digestive tea that helps with bloating, gas, and indigestion.",
-    ingredients: ["Cumin seeds", "Coriander seeds", "Fennel seeds", "Water"],
-    instructions: "Boil equal parts of all three seeds in water for 5 minutes. Strain and drink after meals.",
-    imageUrl: "/placeholder.svg?height=200&width=400",
-    doshas: ["vata", "pitta", "kapha"],
-    likes: 143,
-  },
+  // Add more remedies here...
 ];
 
 export default function Remedies() {
-  const [activeTab, setActiveTab] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter remedies based on search term
+  const filteredRemedies = remedies.filter(remedy => 
+    remedy.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-amber-800 mb-6">Ayurvedic Remedies</h1>
-
-      {/* Search and Filter Section */}
-      <div className="mb-8">
-        <div className="border rounded-lg bg-white p-6">
-          <h2 className="text-xl font-semibold text-amber-800 mb-2">Find the Perfect Remedy</h2>
-          <p className="text-gray-600 mb-4">
-            Search our collection of traditional Ayurvedic remedies for various health concerns
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      {/* Hero Section */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-amber-800 mb-4">
+            Discover Natural Healing
+          </h1>
+          <p className="text-xl text-gray-600 mb-8">
+            Explore our collection of authentic Ayurvedic remedies for various health concerns
           </p>
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-grow">
-              <span className="absolute left-2.5 top-2.5 text-gray-500">🔍</span>
-              <input
-                type="search"
-                placeholder="Search remedies..."
-                className="w-full rounded-md border border-gray-300 pl-8 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-              />
-            </div>
-            <button className="border-green-600 text-green-600 hover:bg-green-50 rounded-md px-4 py-2 border flex items-center gap-2">
-              <span>🛠️</span> Filters
-            </button>
+        </div>
+      </div>
+
+      {/* Search */}
+      <div className="container mx-auto px-4 mb-8">
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="relative">
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search remedies..."
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+            />
           </div>
         </div>
       </div>
 
-      {/* Tabs Navigation */}
-      <div className="mb-8">
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setActiveTab("all")}
-            className={`px-4 py-2 rounded-md ${
-              activeTab === "all" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            All Remedies
-          </button>
-          <button
-            onClick={() => setActiveTab("vata")}
-            className={`px-4 py-2 rounded-md ${
-              activeTab === "vata" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            Vata
-          </button>
-          <button
-            onClick={() => setActiveTab("pitta")}
-            className={`px-4 py-2 rounded-md ${
-              activeTab === "pitta" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            Pitta
-          </button>
-          <button
-            onClick={() => setActiveTab("kapha")}
-            className={`px-4 py-2 rounded-md ${
-              activeTab === "kapha" ? "bg-green-600 text-white" : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            Kapha
-          </button>
+      {/* Featured Categories */}
+      <div className="container mx-auto px-4 mb-16">
+        <h2 className="text-2xl font-bold text-amber-800 mb-6">Featured Categories</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {remedies.map((remedy, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-white rounded-lg shadow-md p-4 text-center cursor-pointer hover:shadow-lg transition-all duration-300"
+            >
+              <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-2">
+                <FiHeart className="w-6 h-6 text-green-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800">{remedy.category}</h3>
+              <p className="text-sm text-gray-600">
+                {remedies.filter(r => r.category === remedy.category).length} remedies
+              </p>
+            </motion.div>
+          ))}
         </div>
       </div>
 
       {/* Remedies Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {remedies
-          .filter((remedy) => activeTab === "all" || remedy.doshas.includes(activeTab))
-          .map((remedy) => (
-            <RemedyCard key={remedy.id} {...remedy} />
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredRemedies.map((remedy) => (
+            <motion.div
+              key={remedy.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="group relative"
+            >
+              <RemedyCard
+                {...remedy}
+                duration={remedy.duration}
+                difficulty={remedy.difficulty}
+              />
+            </motion.div>
           ))}
+        </div>
+
+        {/* Empty State */}
+        {filteredRemedies.length === 0 && (
+          <div className="text-center py-16">
+            <div className="mx-auto w-20 h-20 mb-4">
+              <FiSearch className="w-20 h-20 text-gray-300" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+              No Remedies Found
+            </h3>
+            <p className="text-gray-600">
+              Try adjusting your search term to find what you're looking for.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,74 +1,85 @@
-
-/* RemedyCard.jsx - Component to display an Ayurvedic remedy card with details like name, description, ingredients, doshas, likes, and a details link. Uses Tailwind CSS for styling and react-router-dom for navigation. */
-
 import { Link } from "react-router-dom";
+import { FiArrowRight, FiHeart, FiClock } from "react-icons/fi";
 
-export default function RemedyCard({ id, name, description, ingredients, instructions, imageUrl, doshas, likes = 0 }) {
+export default function RemedyCard({ 
+  id, 
+  name, 
+  description, 
+  ingredients, 
+  instructions, 
+  imageUrl, 
+  doshas, 
+  likes = 0,
+  duration = "15 mins",
+  difficulty = "Easy"
+}) {
   return (
-    <div className="border rounded-lg bg-white shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
-      {/* Image */}
+    <div className="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+      {/* Image with overlay */}
       <div className="relative h-48 w-full">
         <img
           src={imageUrl || "/placeholder.svg"}
           alt={name}
-          className="object-cover w-full h-full"
+          className="absolute inset-0 object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
         />
-      </div>
-
-      {/* Header */}
-      <div className="px-4 pt-4 pb-2">
-        <div className="flex justify-between items-start">
-          <h3 className="text-xl font-semibold text-amber-800">{name}</h3>
-          <div className="flex space-x-1">
-            {doshas.map((dosha) => (
-              <span
-                key={dosha}
-                className={`
-                  inline-block border text-xs px-2 py-1 rounded-full
-                  ${dosha === "vata" ? "border-blue-500 text-blue-500" : ""}
-                  ${dosha === "pitta" ? "border-red-500 text-red-500" : ""}
-                  ${dosha === "kapha" ? "border-green-500 text-green-500" : ""}
-                `}
-              >
-                {dosha.charAt(0).toUpperCase() + dosha.slice(1)}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute bottom-4 left-4">
+            <div className="flex items-center space-x-2 text-white">
+              <span className="inline-flex items-center px-2 py-1 text-xs rounded-full bg-amber-500/20">
+                <FiClock className="w-4 h-4 mr-1" />
+                {duration}
               </span>
-            ))}
+              <span className="inline-flex items-center px-2 py-1 text-xs rounded-full bg-amber-500/20">
+                {difficulty}
+              </span>
+            </div>
           </div>
         </div>
-        <p className="text-gray-600 text-sm mt-1 line-clamp-2">{description}</p>
       </div>
 
       {/* Content */}
-      <div className="px-4 pb-2">
-        <div className="mb-2">
-          <h4 className="text-sm font-semibold text-gray-800 mb-1">Key Ingredients:</h4>
-          <div className="flex flex-wrap gap-1">
-            {ingredients.slice(0, 3).map((ingredient, index) => (
+      <div className="p-4">
+        {/* Header */}
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-xl font-semibold text-amber-800 group-hover:text-amber-600 transition-colors duration-200">
+            {name}
+          </h3>
+          <div className="flex space-x-2">
+            {doshas.map((dosha) => (
               <span
-                key={index}
-                className="inline-block bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full"
+                key={dosha}
+                className={`inline-flex items-center px-2 py-1 text-xs rounded-full ${
+                  dosha === 'Vata' ? 'bg-green-100 text-green-700' :
+                  dosha === 'Pitta' ? 'bg-yellow-100 text-yellow-700' :
+                  'bg-blue-100 text-blue-700'
+                }`}
               >
-                {ingredient}
+                {dosha}
               </span>
             ))}
-            {ingredients.length > 3 && (
-              <span className="inline-block bg-green-50 text-green-700 text-xs px-2 py-1 rounded-full">
-                +{ingredients.length - 3} more
-              </span>
-            )}
           </div>
         </div>
-      </div>
 
-      {/* Footer */}
-      <div className="flex justify-between px-4 pb-4">
-        <button className="border-green-600 text-green-600 hover:bg-green-50 rounded-md px-4 py-2 border">
-          <Link to={`/remedies/${id}`}>View Details</Link>
-        </button>
-        <button className="flex items-center gap-1 text-red-400 hover:text-red-500 hover:bg-red-50 rounded-md px-2 py-1">
-          <span>❤️</span>
-          <span>{likes}</span>
-        </button>
+        {/* Description */}
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{description}</p>
+
+        {/* Actions */}
+        <div className="flex justify-between items-center">
+          {/* Likes */}
+          <button className="flex items-center text-gray-500 hover:text-amber-600 transition-colors duration-200">
+            <FiHeart className="w-5 h-5 mr-1" />
+            <span>{likes}</span>
+          </button>
+
+          {/* Try Button */}
+          <Link 
+            to={`/remedies/${id}`}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-200"
+          >
+            Try Now
+            <FiArrowRight className="w-4 h-4 ml-1" />
+          </Link>
+        </div>
       </div>
     </div>
   );

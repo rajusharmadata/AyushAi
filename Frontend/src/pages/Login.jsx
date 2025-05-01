@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card, CardContent, CardDescription, CardFooter,
+  CardHeader, CardTitle
+} from "../components/ui/card";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "../components/ui/alert";
 
@@ -25,18 +29,33 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setIsLoading(true);
     setLoginError("");
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await axios.post("https://your-api-url.com/api/login", {
+        email,
+        password
+      });
+
+      // Assume API returns { success: true, token: "...", user: { ... } }
+      if (response.data.success) {
+        // Optional: save token to localStorage or context
+        // localStorage.setItem("token", response.data.token);
+        navigate("/user");
+      } else {
+        setLoginError("Invalid email or password.");
+      }
+    } catch (err) {
+      console.error(err);
+      setLoginError("Something went wrong. Please try again.");
+    } finally {
       setIsLoading(false);
-      navigate("/user"); // redirect on success
-    }, 1500);
+    }
   };
 
   return (
@@ -87,7 +106,11 @@ export default function Login() {
               {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
             </div>
 
-            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              disabled={isLoading}
+            >
               {isLoading ? "Logging in..." : "Login"}
             </Button>
           </form>
@@ -95,7 +118,7 @@ export default function Login() {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-gray-600">
             Don&apos;t have an account?{" "}
-            <Link to="/signup" className="text-green-600 hover:underline">
+            <Link to="/sinup" className="text-green-600 hover:underline">
               Sign up
             </Link>
           </p>
