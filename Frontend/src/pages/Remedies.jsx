@@ -3,6 +3,12 @@ import { useState } from "react";
 import RemedyCard from "../components/RemedyCard";
 import { FiSearch, FiHeart, FiClock } from "react-icons/fi";
 import { motion } from "framer-motion";
+import TumericMilk from "../assets/TumericMilk.jpg";
+import GingerTea from "../assets/GingerTea.jpg";
+import GingerAndHoney from "../assets/GingerAndHoney.jpg";
+import TulsiTea from "../assets/TulsiTea.jpg";
+import CuminAndCorianderTea from "../assets/CuminAndCorianderTea.jpg";
+import GuduchiKadha from "../assets/GuduchiKadha.jpg";
 
 // Enhanced sample data with more details
 const remedies = [
@@ -12,7 +18,7 @@ const remedies = [
     description: "A soothing drink that helps reduce inflammation and supports the immune system.",
     ingredients: ["Turmeric powder", "Milk", "Black pepper", "Honey", "Cinnamon"],
     instructions: "Heat milk, add turmeric, black pepper, and cinnamon. Simmer for 5 minutes. Add honey to taste.",
-    imageUrl: "/placeholder.svg?height=200&width=400",
+    imageUrl: TumericMilk,
     doshas: ["vata", "kapha"],
     likes: 124,
     duration: "10 mins",
@@ -26,7 +32,7 @@ const remedies = [
     description: "Helps with digestion, nausea, and cold symptoms. A warming remedy for Vata and Kapha imbalances.",
     ingredients: ["Fresh ginger", "Water", "Lemon", "Honey", "Cinnamon stick"],
     instructions: "Boil water with sliced ginger for 10 minutes. Add lemon juice and honey to taste.",
-    imageUrl: "/placeholder.svg?height=200&width=400",
+    imageUrl: GingerTea,
     doshas: ["vata", "kapha"],
     likes: 98,
     duration: "15 mins",
@@ -35,30 +41,57 @@ const remedies = [
   },
   {
     id: "3",
-    name: "Turmeric Milk (Golden Milk)",
-    description: "A soothing drink that helps reduce inflammation and supports the immune system.",
-    ingredients: ["Turmeric powder", "Milk", "Black pepper", "Honey", "Cinnamon"],
-    instructions: "Heat milk, add turmeric, black pepper, and cinnamon. Simmer for 5 minutes. Add honey to taste.",
-    imageUrl: "/placeholder.svg?height=200&width=400",
-    doshas: ["vata", "kapha"],
-    likes: 124,
-    duration: "10 mins",
+    name: "Ginger and Honey",
+    description: "Relieves cough and sore throat. A natural expectorant.",
+    ingredients: ["Fresh ginger", "Honey"],
+    instructions: "Make a paste of ginger and honey. Take 1 tsp thrice a day.",
+    imageUrl: GingerAndHoney,
+    doshas: ["kapha"],
+    likes: 75,
+    duration: "5 mins",
     difficulty: "Easy",
-    category: "Digestion"
+    category: "Respiratory"
   },
   {
     id: "4",
-    name: "Turmeric Milk (Golden Milk)",
-    description: "A soothing drink that helps reduce inflammation and supports the immune system.",
-    ingredients: ["Turmeric powder", "Milk", "Black pepper", "Honey", "Cinnamon"],
-    instructions: "Heat milk, add turmeric, black pepper, and cinnamon. Simmer for 5 minutes. Add honey to taste.",
-    imageUrl: "/placeholder.svg?height=200&width=400",
-    doshas: ["vata", "kapha"],
+    name: "Tulsi Tea",
+    description: "Supports the immune system and reduces stress.",
+    ingredients: ["Tulsi leaves", "Water", "Lemon", "Honey"],
+    instructions: "Boil water with tulsi leaves for 5 minutes. Add lemon juice and honey to taste.",
+    imageUrl: TulsiTea,
+    doshas: ["vata", "pitta"],
     likes: 124,
     duration: "10 mins",
     difficulty: "Easy",
-    category: "Digestion"
+    category: "Stress relief"
   },
+  {
+    id: "5",
+    name: "Cumin and Coriander Tea",
+    description: "Soother for digestive issues and stress.",
+    ingredients: ["Cumin seeds", "Coriander seeds", "Water", "Honey"],
+    instructions: "Boil water with cumin and coriander seeds for 10 minutes. ",
+    imageUrl: CuminAndCorianderTea,
+    doshas: ["pitta", "vata"],
+    likes: 75,
+    duration: "15 mins",
+    difficulty: "Easy",
+    category: "Stress relief"
+  },
+  {
+    id: "6",
+    name: "Guduchi Kadha",
+    description: "A natural immune booster that helps reduce fever and inflammation.",
+    ingredients: ["Guduchi", "Water", "Honey"],
+    instructions: "Boil water with guduchi powder for 10 minutes.",
+    imageUrl: GuduchiKadha,
+    doshas: ["vata", "kapha"],
+    likes: 98,
+    duration: "15 mins",
+    difficulty: "Easy",
+    category: "Immunity"
+  },
+ 
   // Add more remedies here...
 ];
 
@@ -133,7 +166,7 @@ export default function Remedies() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="group relative"
+              className="group relative h-96 w-full"
             >
               <RemedyCard
                 {...remedy}
