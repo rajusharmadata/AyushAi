@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from "react";
 import RemedyCard from "../components/RemedyCard";
 import { FiSearch, FiHeart, FiClock } from "react-icons/fi";
@@ -70,14 +71,14 @@ export default function Remedies() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-green-100 via-green-300 to-green-400 filter saturate-150 contrast-125 ">
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-amber-800 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-amber-800 mb-6">
             Discover Natural Healing
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
             Explore our collection of authentic Ayurvedic remedies for various health concerns
           </p>
         </div>
@@ -85,15 +86,15 @@ export default function Remedies() {
 
       {/* Search */}
       <div className="container mx-auto px-4 mb-8">
-        <div className="bg-white rounded-lg shadow-lg p-6">
+        <div className="bg-white rounded-full shadow-lg ">
           <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-300 text-2xl" />
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search remedies..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600"
             />
           </div>
         </div>

@@ -1,62 +1,134 @@
-import { Link } from "react-router-dom";
-import { Button } from "../components/ui/button"; // adjust path as needed
-import { Globe } from "lucide-react";
+import React from "react";
+import { Globe, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+  
+  // Since we can't use react-router-dom in this demo, let's use regular anchor tags
+  // In your actual implementation, replace these with Link components
+  
   return (
-    <footer className="bg-green-50 border-t border-green-100">
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-green-800 text-white">
+      {/* Main Footer Content */}
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-amber-800">About AyushAI</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="text-xl font-semibold text-green-100">About AyushAI</h3>
+            <p className="text-green-200">
               AyushAI combines ancient Ayurvedic wisdom with modern AI technology to provide personalized health
               recommendations.
             </p>
+            <div className="flex space-x-4 pt-2">
+              <a href="#" className="text-green-200 hover:text-white transition-colors">
+                <Facebook size={20} />
+              </a>
+              <a href="#" className="text-green-200 hover:text-white transition-colors">
+                <Twitter size={20} />
+              </a>
+              <a href="#" className="text-green-200 hover:text-white transition-colors">
+                <Instagram size={20} />
+              </a>
+              <a href="#" className="text-green-200 hover:text-white transition-colors">
+                <Youtube size={20} />
+              </a>
+            </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-amber-800">Quick Links</h3>
+            <h3 className="text-xl font-semibold text-green-100">Quick Links</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="text-sm text-gray-600 hover:text-amber-800">Home</Link></li>
-              <li><Link to="/chat" className="text-sm text-gray-600 hover:text-amber-800">Chat with AyushAI</Link></li>
-              <li><Link to="/remedies" className="text-sm text-gray-600 hover:text-amber-800">Ayurvedic Remedies</Link></li>
-              <li><Link to="/practitioners" className="text-sm text-gray-600 hover:text-amber-800">Find Practitioners</Link></li>
+              <li>
+                <a href="/" className="text-green-200 hover:text-white transition-colors flex items-center">
+                  <span className="mr-2">›</span>Home
+                </a>
+              </li>
+              <li>
+                <a href="/chat" className="text-green-200 hover:text-white transition-colors flex items-center">
+                  <span className="mr-2">›</span>Chat with AyushAI
+                </a>
+              </li>
+              <li>
+                <a href="/remedies" className="text-green-200 hover:text-white transition-colors flex items-center">
+                  <span className="mr-2">›</span>Ayurvedic Remedies
+                </a>
+              </li>
+              <li>
+                <a href="/practitioners" className="text-green-200 hover:text-white transition-colors flex items-center">
+                  <span className="mr-2">›</span>Find Practitioners
+                </a>
+              </li>
             </ul>
           </div>
 
           {/* Legal */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-amber-800">Legal</h3>
+            <h3 className="text-xl font-semibold text-green-100">Legal</h3>
             <ul className="space-y-2">
-              <li><Link to="/terms" className="text-sm text-gray-600 hover:text-amber-800">Terms of Service</Link></li>
-              <li><Link to="/privacy" className="text-sm text-gray-600 hover:text-amber-800">Privacy Policy</Link></li>
-              <li><Link to="/disclaimer" className="text-sm text-gray-600 hover:text-amber-800">Medical Disclaimer</Link></li>
+              <li>
+                <a href="/terms" className="text-green-200 hover:text-white transition-colors flex items-center">
+                  <span className="mr-2">›</span>Terms of Service
+                </a>
+              </li>
+              <li>
+                <a href="/privacy" className="text-green-200 hover:text-white transition-colors flex items-center">
+                  <span className="mr-2">›</span>Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="/disclaimer" className="text-green-200 hover:text-white transition-colors flex items-center">
+                  <span className="mr-2">›</span>Medical Disclaimer
+                </a>
+              </li>
+              <li>
+                <a href="/contact" className="text-green-200 hover:text-white transition-colors flex items-center">
+                  <span className="mr-2">›</span>Contact Us
+                </a>
+              </li>
             </ul>
           </div>
 
-          {/* Language Selector */}
+          {/* Newsletter & Language */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-amber-800">Language</h3>
-            <div>
-              <Button variant="outline" className="w-full justify-start text-gray-600 border-gray-300">
-                <Globe className="mr-2 h-4 w-4" />
-                <span>English</span>
-              </Button>
+            <h3 className="text-xl font-semibold text-green-100">Stay Connected</h3>
+            <p className="text-green-200">Subscribe to our newsletter for Ayurvedic tips and updates.</p>
+            <div className="flex">
+              <input 
+                type="email" 
+                placeholder="Your email" 
+                className="px-4 py-2 w-full rounded-l-md text-green-800 focus:outline-none"
+              />
+              <button className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-r-md transition-colors">
+                Subscribe
+              </button>
             </div>
-            <p className="text-xs text-gray-500 mt-4">© {new Date().getFullYear()} AyushAI. All rights reserved.</p>
+            
+            <div className="pt-4">
+              <h4 className="text-green-100 font-medium mb-2">Language</h4>
+              <button className="flex items-center space-x-2 bg-green-700 hover:bg-green-600 px-3 py-2 rounded-md transition-colors">
+                <Globe size={16} />
+                <span>English</span>
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Disclaimer */}
-        <div className="mt-8 pt-6 border-t border-green-200">
-          <p className="text-xs text-gray-500 text-center">
-            Disclaimer: AyushAI is not a substitute for professional medical advice, diagnosis, or treatment. Always
-            seek the advice of your physician or other qualified health provider with any questions you may have
-            regarding a medical condition.
-          </p>
+      </div>
+      
+      {/* Bottom Bar */}
+      <div className="bg-green-900 py-4">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-green-300 text-sm">
+              © {currentYear} AyushAI. All rights reserved.
+            </p>
+            
+            {/* Disclaimer */}
+            <p className="text-green-400 text-xs mt-2 md:mt-0 text-center md:text-right max-w-lg">
+              AyushAI is not a substitute for professional medical advice. Always
+              consult with qualified health providers regarding medical conditions.
+            </p>
+          </div>
         </div>
       </div>
     </footer>

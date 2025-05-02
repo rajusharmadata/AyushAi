@@ -11,10 +11,8 @@ import ForgetPassword from "./pages/ForgetPassword";
 import UserDashboard from "./pages/UserDashboard";
 import NotFound from "./pages/NotFound";
 
-// Component to conditionally render Navbar and Footer
 function Layout() {
   const location = useLocation();
-  // Define routes where Navbar and Footer should not appear
   const noNavFooterRoutes = [
     "/login",
     "/sinup",
@@ -34,8 +32,8 @@ function Layout() {
         <Route path="/login" element={<Login />} />
         <Route path="/sinup" element={<Sinup />} />
         <Route path="/forgot-password" element={<ForgetPassword />} />
-        <Route path="/user/:userId" element={<UserDashboard />} />
-        <Route path="*" element={<NotFound />} />  // This will catch all unknown routes
+        <Route path="/user/*" element={<UserDashboard />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       {showNavFooter && <Footer />}
     </>
@@ -44,9 +42,7 @@ function Layout() {
 
 function App() {
   return (
-    
-      <Layout />
-   
+    <Layout />
   );
 }
 

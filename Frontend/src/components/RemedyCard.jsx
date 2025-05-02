@@ -5,8 +5,6 @@ export default function RemedyCard({
   id, 
   name, 
   description, 
-  ingredients, 
-  instructions, 
   imageUrl, 
   doshas, 
   likes = 0,
@@ -14,7 +12,7 @@ export default function RemedyCard({
   difficulty = "Easy"
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-white shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <div className="group relative overflow-hidden rounded-lg bg-white opacity-90 shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 filter sepia-10 saturate-125">
       {/* Image with overlay */}
       <div className="relative h-48 w-full">
         <img
@@ -41,7 +39,7 @@ export default function RemedyCard({
       <div className="p-4">
         {/* Header */}
         <div className="flex justify-between items-start mb-2">
-          <h3 className="text-xl font-semibold text-amber-800 group-hover:text-amber-600 transition-colors duration-200">
+          <h3 className="text-xl font-semibold text-amber-800 group-hover:text-amber-600 transition-colors duration-200 font-heading">
             {name}
           </h3>
           <div className="flex space-x-2">
@@ -61,7 +59,7 @@ export default function RemedyCard({
         </div>
 
         {/* Description */}
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{description}</p>
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2 font-body">{description}</p>
 
         {/* Actions */}
         <div className="flex justify-between items-center">

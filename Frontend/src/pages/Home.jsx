@@ -1,6 +1,6 @@
 
 /* Home.jsx - Home page component for a React.js project, showcasing AyushAI features with hero, features, testimonials, and CTA sections. Uses Tailwind CSS for styling and react-router-dom for navigation. */
-
+ // Importing an image for the hero sectiona
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -10,10 +10,10 @@ export default function Home() {
       <section className="py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-bold text-amber-800">
+            <h1 className="text-4xl md:text-5xl font-bold text-amber-800 mb-4">
               Your Personal Ayurvedic Health Assistant
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 leading-relaxed">
               AyushAI combines ancient Ayurvedic wisdom with modern AI technology to provide personalized health
               recommendations based on your symptoms.
             </p>
@@ -25,13 +25,6 @@ export default function Home() {
                 <Link to="/remedies">Explore Remedies</Link>
               </button>
             </div>
-          </div>
-          <div className="relative h-[300px] md:h-[400px] rounded-xl overflow-hidden">
-            <img
-              src="/placeholder.svg?height=400&width=600"
-              alt="Ayurvedic herbs and remedies"
-              className="object-cover w-full h-full"
-            />
           </div>
         </div>
       </section>

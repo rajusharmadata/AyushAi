@@ -1,5 +1,6 @@
-
 import { useState, useRef, useEffect } from "react";
+import { AiOutlineSend } from "react-icons/ai";
+import { format } from "date-fns";
 
 // Sample responses for the chatbot
 const botResponses = [
@@ -76,7 +77,7 @@ export default function Chat() {
 
   // Format timestamp to HH:MM
   const formatTime = (date) => {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return format(date, "HH:mm");
   };
 
   return (
@@ -173,7 +174,7 @@ export default function Chat() {
                 className="bg-green-600 hover:bg-green-700 text-white rounded-md px-4 py-2 disabled:bg-green-400 disabled:cursor-not-allowed"
                 disabled={!input.trim() || isTyping}
               >
-                ➡️
+                <AiOutlineSend className="w-6 h-6" />
               </button>
             </form>
             <p className="text-xs text-gray-500 mt-2">

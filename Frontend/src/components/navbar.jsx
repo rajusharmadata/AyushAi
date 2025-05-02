@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import AyushAI from "../assets/Ayushai.png";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,12 +24,14 @@ export default function Navbar() {
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-green-600">
-              Ayush<span className="text-amber-600">AI</span>
-            </span>
-          </Link>
+          <div className="flex items-center ml-0">
+            <img src={AyushAI} alt="AyushAi logo" className="h-12 rounded-2xl" />
+            <Link to="/" className="flex items-center">
+              <span className="text-3xl font-bold text-green-600 mt-5">
+                Ayush<span className="text-amber-600 mt-5">AI</span>
+              </span>
+            </Link>
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
@@ -36,7 +39,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 to={link.href}
-                className={`text-sm font-medium transition-colors ${
+                className={`text-lg font-medium  transition-colors ${
                   isActive(link.href)
                     ? "text-amber-800 border-b-2 border-amber-800"
                     : "text-gray-600 hover:text-amber-800"

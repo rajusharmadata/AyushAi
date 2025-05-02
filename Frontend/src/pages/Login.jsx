@@ -37,22 +37,24 @@ export default function Login() {
     setLoginError("");
 
     try {
-      const response = await axios.post("https://your-api-url.com/api/login", {
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
         email,
         password
       });
 
-      // Assume API returns { success: true, token: "...", user: { ... } }
       if (response.data.success) {
-        // Optional: save token to localStorage or context
-        // localStorage.setItem("token", response.data.token);
-        navigate("/user");
+        // Store token and user data
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        
+        // Redirect to user dashboard
+        navigate('/user/dashboard');
       } else {
-        setLoginError("Invalid email or password.");
+        setLoginError(response.data.message || 'Login failed. Please try again.');
       }
-    } catch (err) {
-      console.error(err);
-      setLoginError("Something went wrong. Please try again.");
+    } catch (error) {
+      console.error('Login error:', error);
+      setLoginError(error.response?.data?.message || 'Invalid email or password');
     } finally {
       setIsLoading(false);
     }

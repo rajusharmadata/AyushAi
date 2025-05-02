@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { toast } from 'react-hot-toast'
 import { Link, useNavigate } from 'react-router-dom'
+import { signup } from '../services/authService'
 
 export const Sinup = () => {
   const navigate = useNavigate()
@@ -36,14 +36,31 @@ export const Sinup = () => {
       return
     }
 
+
+
     setLoading(true)
     try {
+      // Remove confirmPassword before sending to backend
       const { confirmPassword, ...signupData } = formData
-      const response = await axios.post('http://localhost:5000/api/auth/signup', signupData)
-      toast.success('Account created successfully!')
-      navigate('/login')
+      
+      const response = await signup(signupData)
+      
+      if (response.success) {
+        // Store the token and user data
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('user', JSON.stringify(response.data.user))
+        toast.success('Account created successfully!')
+        navigate('/login')
+      } else {
+        throw new Error(response.data.message || 'Signup failed')
+      }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Something went wrong')
+      console.error('Signup error:', error);
+      if (error.response) {
+        toast.error(error.response.data.message || 'Signup failed');
+      } else {
+        toast.error('An error occurred during signup. Please try again.');
+      }
     } finally {
       setLoading(false)
     }
@@ -93,7 +110,6 @@ export const Sinup = () => {
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
                   required
                   value={formData.email}
                   onChange={handleChange}
