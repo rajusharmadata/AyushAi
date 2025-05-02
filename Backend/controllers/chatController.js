@@ -1,75 +1,38 @@
 import Chat from '../module/chat.js';
 import Message from '../module/message.js';
 import User from '../module/User.js';
+import Remedy from '../module/remedy.js'; // Ensure the correct path to the Remedy model
 
-export const createChat = async (req, res) => {
+
+export const getRemedyForMessage = async (req, res) => {
     try {
-        const { participants } = req.body;
-        
-        // Check if chat already exists
-        const existingChat = await Chat.findOne({
-            participants: { $all: participants }
+        const { message } = req.body;
+
+        // Split the user's message into words
+        const words = message.split(/\s+/);
+
+        // Find remedies where any word matches
+        const remedies = await Remedy.find({
+            $or: [
+            { symptoms: { $in: words } },
+            { remedy: { $in: words } }
+            ]
         });
 
-        if (existingChat) {
-            return res.status(400).json({ message: 'Chat already exists' });
+        if (remedies.length > 0) {
+            const filteredRemedies = remedies.map(remedy => ({
+                remedy: remedy.remedy,
+                symptoms: remedy.symptoms.filter(symptom => words.includes(symptom)),
+                description: remedy.description
+            }));
+            res.json(filteredRemedies);
+            console.log('Filtered Remedies:', filteredRemedies);
+        } else {
+            res.status(404).json({ message: 'No remedies found for the given message.' });
         }
-
-        const chat = new Chat({ participants });
-        await chat.save();
-
-        res.status(201).json(chat);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-export const getChats = async (req, res) => {
-    try {
-        const userChats = await Chat.find({
-            participants: { $in: [req.user._id] }
-        }).populate('participants', 'name profilePicture');
 
-        res.json(userChats);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-export const sendMessage = async (req, res) => {
-    try {
-        const { chatId, content } = req.body;
-        
-        const message = new Message({
-            sender: req.user._id,
-            receiver: req.user._id, // We'll need to get the receiver ID from the chat
-            content,
-            chat: chatId
-        });
-
-        await message.save();
-
-        // Update chat's last message time
-        await Chat.findByIdAndUpdate(chatId, {
-            lastMessage: Date.now()
-        });
-
-        res.status(201).json(message);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-export const getMessages = async (req, res) => {
-    try {
-        const messages = await Message.find({
-            chat: req.params.chatId
-        })
-        .populate('sender', 'name profilePicture')
-        .sort({ timestamp: 1 });
-
-        res.json(messages);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};

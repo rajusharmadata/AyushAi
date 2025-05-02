@@ -1,37 +1,26 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const remedySchema = new mongoose.Schema({
-    name: {
-        type: String,
+    symptoms: {
+        type: [String],
         required: true,
-        trim: true
+    },
+    remedy: {
+        type: [String],
+        required: true,
     },
     description: {
         type: String,
-        required: true
-    },
-    category: {
-        type: String,
-        required: true
-    },
-    ingredients: [{
-        name: String,
-        quantity: String
-    }],
-    instructions: [String],
-    duration: {
-        type: String,
-        required: true
+        required: true,
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    }
+    updatedAt: {
+        type: Date,
+        default: Date.now,
+    },
 });
-
-export default mongoose.model('Remedy', remedySchema);
+const Remedy = mongoose.model("Remedy", remedySchema);
+export default Remedy;

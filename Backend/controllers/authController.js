@@ -6,12 +6,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+// user registration
 export const register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
-        
+        const { name, username, email, password } = req.body;
+
         // Validate input
-        if (!name || !email || !password) {
+        if (!name || !username || !email || !password) {
             return res.status(400).json({
                 success: false,
                 message: 'All fields are required'
@@ -23,7 +24,7 @@ export const register = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({
                 success: false,
-                message: 'User already exists'
+                message: 'Email already in use'
             });
         }
 
@@ -31,39 +32,27 @@ export const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Create new user
-        const user = new User({
+        const newUser = new User({
             name,
+            username,
             email,
             password: hashedPassword
         });
 
-        await user.save();
-
-        // Create token
-        const token = jwt.sign(
-            { userId: user._id },
-            process.env.JWT_SECRET,
-            { expiresIn: '24h' }
-        );
+        await newUser.save();
 
         res.status(201).json({
             success: true,
             message: 'User registered successfully',
             user: {
-                _id: user._id,
-                name: user.name,
-                email: user.email
-            },
-            token
+                _id: newUser._id,
+                name: newUser.name,
+                username: newUser.username,
+                email: newUser.email
+            }
         });
     } catch (error) {
         console.error('Registration error:', error);
-        if (error.name === 'ValidationError') {
-            return res.status(400).json({
-                success: false,
-                message: error.message
-            });
-        }
         res.status(500).json({
             success: false,
             message: 'Internal server error'
@@ -71,31 +60,42 @@ export const register = async (req, res) => {
     }
 };
 
+// user login
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        console.log('Login attempt:', { email }); // Debug log
+        
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required'
+            });
+        }
 
+        // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
-            console.log('User not found for email:', email); // Debug log
-            return res.status(400).json({ message: 'User not found' });
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid email'
+            });
         }
 
-        console.log('User found:', {
-            id: user._id,
-            name: user.name,
-            email: user.email
-        }); // Debug log
-
-        console.log('User found, comparing password...'); // Debug log
-        console.log('Stored password hash:', user.password); // Debug log
-        const isMatch = await user.comparePassword(password);
+        // Compare password
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            console.log('Password mismatch for user:', user._id); // Debug log
-            return res.status(400).json({ message: 'Invalid email or password' });
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid password'
+            });
         }
 
+        // Create token
+        if (!process.env.JWT_SECRET) {
+            console.error('JWT_SECRET is not defined in environment variables'); // Debug log
+            return res.status(500).json({ message: 'Internal server error' });
+        }
         const token = jwt.sign(
             { userId: user._id },
             process.env.JWT_SECRET,
@@ -113,13 +113,15 @@ export const login = async (req, res) => {
             token
         });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({
             success: false,
-            message: error.message
+            message: 'Internal server error'
         });
     }
-};
+}
 
+// user forgot password
 export const forgotPassword = async (req, res) => {
     try {
         const { email } = req.body;
@@ -149,35 +151,54 @@ export const forgotPassword = async (req, res) => {
     }
 };
 
+// user reset password
 export const resetPassword = async (req, res) => {
     try {
-        const { password } = req.body;
-        const { resetToken } = req.params;
+        const { email, oldPassword, newPassword } = req.body;
 
-        const user = await User.findOne({
-            passwordResetToken: resetToken,
-            passwordResetExpires: { $gt: Date.now() }
-        });
+        // Validate input
+        if (!email || !oldPassword || !newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: 'All fields are required'
+            });
+        }
 
+        // Check if user exists
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid or expired token' });
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        // Compare old password
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({
+                success: false,
+                message: 'Old password is incorrect'
+            });
         }
 
         // Hash new password
-        const hashedPassword = await bcrypt.hash(password, 10);
-        
-        // Update user's password and clear reset token
-        user.password = hashedPassword;
-        user.passwordResetToken = undefined;
-        user.passwordResetExpires = undefined;
+        const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
+        // Update password
+        user.password = hashedNewPassword;
         await user.save();
 
         res.status(200).json({
-            message: 'Password reset successful'
+            success: true,
+            message: 'Password reset successfully'
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Reset password error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
     }
 };
 
@@ -192,3 +213,5 @@ export const logout = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+

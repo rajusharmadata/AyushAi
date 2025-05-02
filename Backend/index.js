@@ -20,7 +20,6 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
-app.use('/api/remedies', remedyRoutes);
 app.use('/api/practitioners', practitionerRoutes);
 
 // Error handling middleware
