@@ -57,7 +57,7 @@ export default function Navbar() {
                 Login
               </button>
             </Link>
-            <Link to="/sinup">
+            <Link to="/Signup">
               <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded">
                 Sign Up
               </button>

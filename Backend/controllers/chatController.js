@@ -1,7 +1,7 @@
 import Chat from '../module/chat.js';
 import Message from '../module/message.js';
 import User from '../module/User.js';
-import Remedy from '../module/remedy.js'; // Ensure the correct path to the Remedy model
+import Remedy from '../module/Remedy.js'; // Ensure the correct path to the Remedy model
 
 
 export const getRemedyForMessage = async (req, res) => {
