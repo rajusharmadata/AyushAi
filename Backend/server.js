@@ -21,13 +21,13 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/practitioners', practitionerRoutes);
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ayushai', {
+// Connect to MongoDB Atlas
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://ayushshoundik26:ayush1234@ayushai.6cw8xkd.mongodb.net/', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
-.then(() => console.log('MongoDB connected'))
-.catch(err => console.error('MongoDB connection error:', err));
+.then(() => console.log('MongoDB Atlas connected'))
+.catch(err => console.error('MongoDB Atlas connection error:', err));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

@@ -41,4 +41,4 @@ export const getUserDashboard = async (req, res) => {
   }
 };
 
-// get user profile by username
+
