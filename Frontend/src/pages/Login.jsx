@@ -43,12 +43,9 @@ export default function Login() {
       });
 
       if (response.data.success) {
-        // Store token and user data
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        
-        // Redirect to user dashboard
-        navigate('/user/dashboard');
+        navigate('/userChatPage');
       } else {
         setLoginError(response.data.message || 'Login failed. Please try again.');
       }
@@ -61,11 +58,11 @@ export default function Login() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16 flex justify-center">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-emerald-100 to-green-50 px-4 py-12">
+      <Card className="w-full max-w-md shadow-lg rounded-2xl border border-green-200 bg-white">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center text-amber-800">Login to AyushAI</CardTitle>
-          <CardDescription className="text-center">
+          <CardTitle className="text-3xl font-extrabold text-center text-emerald-700">Login to AyushAI</CardTitle>
+          <CardDescription className="text-center text-gray-600">
             Enter your email and password to access your account
           </CardDescription>
         </CardHeader>
@@ -77,23 +74,23 @@ export default function Login() {
             </Alert>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-green-700">Email</Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={errors.email ? "border-red-500" : ""}
+                className={`focus:ring-2 focus:ring-green-500 ${errors.email ? "border-red-500" : ""}`}
               />
               {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-green-700">Password</Label>
                 <Link to="/forgot-password" className="text-xs text-green-600 hover:underline">
                   Forgot password?
                 </Link>
@@ -103,14 +100,14 @@ export default function Login() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={errors.password ? "border-red-500" : ""}
+                className={`focus:ring-2 focus:ring-green-500 ${errors.password ? "border-red-500" : ""}`}
               />
               {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              className="w-full bg-green-600 hover:bg-green-700 text-white rounded-md"
               disabled={isLoading}
             >
               {isLoading ? "Logging in..." : "Login"}
@@ -119,8 +116,8 @@ export default function Login() {
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-gray-600">
-            Don&apos;t have an account?{" "}
-            <Link to="/signup" className="text-green-600 hover:underline">
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-green-700 hover:underline font-medium">
               Sign up
             </Link>
           </p>
