@@ -45,7 +45,7 @@ export default function Login() {
       if (response.data.success) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        navigate('/userChatPage');
+        navigate('/chat');
       } else {
         setLoginError(response.data.message || 'Login failed. Please try again.');
       }
