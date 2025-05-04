@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = 'https://ayushai-1.onrender.com/';
 
 // Configure axios defaults
 axios.defaults.headers.common['Content-Type'] = 'application/json';

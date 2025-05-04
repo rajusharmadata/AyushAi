@@ -38,7 +38,7 @@ export default function Chat() {
     setIsTyping(true);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/chat", {
+      const response = await axios.post("https://ayushai-1.onrender.com/api/chat", {
         message: input,
       });
 

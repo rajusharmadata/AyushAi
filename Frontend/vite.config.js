@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://ayushai-backend.onrender.com',
+        target: 'https://ayushai-1.onrender.com',
         changeOrigin: true,
         pathRewrite: { '^/api': '' },
       },

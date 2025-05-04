@@ -79,7 +79,7 @@ export default function SignupForm() {
 
       try {
         const response = await axios.post(
-          'http://localhost:5000/api/auth/signup',
+          'https://ayushai-1.onrender.com/api/auth/signup',
           {
             username: formData.username,
             name: formData.name,
