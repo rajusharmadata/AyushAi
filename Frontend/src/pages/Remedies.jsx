@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import RemedyCard from "../components/RemedyCard";
-import { FiSearch, FiHeart, FiClock } from "react-icons/fi";
+import { FiSearch, FiHeart, FiFilter, FiClock, FiArrowRight } from "react-icons/fi";
+import { BiLeaf, BiShield, BiDish, BiWind, BiBrain } from "react-icons/bi";
 import { motion } from "framer-motion";
 import TumericMilk from "../assets/TumericMilk.jpg";
 import GingerTea from "../assets/GingerTea.jpg";
@@ -25,7 +26,6 @@ const remedies = [
     difficulty: "Easy",
     category: "Digestion"
   },
-
   {
     id: "2",
     name: "Ginger Tea",
@@ -91,82 +91,255 @@ const remedies = [
     difficulty: "Easy",
     category: "Immunity"
   },
- 
-  // Add more remedies here...
 ];
+
+const categoryIcons = {
+  "Digestion": <BiDish className="w-6 h-6" />,
+  "Immunity": <BiShield className="w-6 h-6" />,
+  "Respiratory": <BiWind className="w-6 h-6" />,
+  "Stress relief": <BiBrain className="w-6 h-6" />
+};
 
 export default function Remedies() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeDosha, setActiveDosha] = useState("all");
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // Filter remedies based on search term
-  const filteredRemedies = remedies.filter(remedy => 
-    remedy.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Extract unique categories
+  const categories = [...new Set(remedies.map(remedy => remedy.category))];
+
+  // Filter remedies based on search term, dosha and category
+  const filteredRemedies = remedies.filter(remedy => {
+    const matchesSearch = remedy.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                         remedy.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDosha = activeDosha === "all" || remedy.doshas.includes(activeDosha);
+    const matchesCategory = activeCategory === "all" || remedy.category === activeCategory;
+    
+    return matchesSearch && matchesDosha && matchesCategory;
+  });
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  };
+
+  // Scroll to top when filters change
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [activeDosha, activeCategory]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-green-100 via-green-300 to-green-400 filter saturate-150 contrast-125 ">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-green-50 to-green-100">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-amber-800 mb-6">
-            Discover Natural Healing
-          </h1>
-          <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-            Explore our collection of authentic Ayurvedic remedies for various health concerns
-          </p>
-        </div>
-      </div>
-
-      {/* Search */}
-      <div className="container mx-auto px-4 mb-8">
-        <div className="bg-white rounded-full shadow-lg ">
-          <div className="relative">
-            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-green-300 text-2xl" />
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search remedies..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-green-600"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Featured Categories */}
-      <div className="container mx-auto px-4 mb-16">
-        <h2 className="text-2xl font-bold text-amber-800 mb-6">Featured Categories</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {remedies.map((remedy, index) => (
+      <div className="relative bg-gradient-to-r from-green-600 to-green-700 overflow-hidden">
+        <div className="absolute inset-0 bg-pattern opacity-10"></div>
+        <div className="absolute right-0 top-0 w-64 h-64 bg-white rounded-full -mr-32 -mt-32 opacity-10"></div>
+        <div className="absolute left-0 bottom-0 w-64 h-64 bg-white rounded-full -ml-32 -mb-32 opacity-10"></div>
+        
+        <div className="container mx-auto px-4 py-20 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-lg shadow-md p-4 text-center cursor-pointer hover:shadow-lg transition-all duration-300"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-2">
-                <FiHeart className="w-6 h-6 text-green-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800">{remedy.category}</h3>
-              <p className="text-sm text-gray-600">
-                {remedies.filter(r => r.category === remedy.category).length} remedies
+              <span className="inline-block px-4 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium mb-4">Ancient Wisdom</span>
+              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 drop-shadow-md">
+                Discover Natural Ayurvedic Remedies
+              </h1>
+              <p className="text-xl text-green-100 mb-8 leading-relaxed max-w-2xl mx-auto">
+                Explore our curated collection of authentic Ayurvedic remedies passed down through generations
               </p>
             </motion.div>
-          ))}
+            
+            {/* Search Bar */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="max-w-2xl mx-auto relative"
+            >
+              <div className="relative">
+                <FiSearch className="absolute left-5 top-1/2 transform -translate-y-1/2 text-green-600 text-xl" />
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search for remedies, ingredients, or health concerns..."
+                  className="w-full pl-12 pr-4 py-4 border-none rounded-full focus:outline-none focus:ring-2 focus:ring-green-600 shadow-lg text-gray-700"
+                />
+                <button 
+                  onClick={() => setIsFilterOpen(!isFilterOpen)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-all"
+                >
+                  <FiFilter className="text-lg" />
+                </button>
+              </div>
+            </motion.div>
+          </div>
         </div>
+        
+        {/* Filter Section - Conditionally Rendered */}
+        {isFilterOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="container mx-auto px-4 pb-6"
+          >
+            <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Filter by Dosha</h3>
+                <div className="flex flex-wrap gap-2">
+                  <button 
+                    onClick={() => setActiveDosha("all")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeDosha === "all" 
+                        ? "bg-green-600 text-white" 
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    All Doshas
+                  </button>
+                  <button 
+                    onClick={() => setActiveDosha("vata")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeDosha === "vata" 
+                        ? "bg-blue-600 text-white" 
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    Vata
+                  </button>
+                  <button 
+                    onClick={() => setActiveDosha("pitta")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeDosha === "pitta" 
+                        ? "bg-red-600 text-white" 
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    Pitta
+                  </button>
+                  <button 
+                    onClick={() => setActiveDosha("kapha")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeDosha === "kapha" 
+                        ? "bg-green-600 text-white" 
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    Kapha
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">Filter by Category</h3>
+                <div className="flex flex-wrap gap-2">
+                  <button 
+                    onClick={() => setActiveCategory("all")}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      activeCategory === "all" 
+                        ? "bg-amber-600 text-white" 
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    All Categories
+                  </button>
+                  {categories.map(category => (
+                    <button 
+                      key={category}
+                      onClick={() => setActiveCategory(category)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                        activeCategory === category 
+                          ? "bg-amber-600 text-white" 
+                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
 
-      {/* Remedies Grid */}
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-16">
+        {/* Categories */}
+        <div className="mb-16">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-bold text-amber-800">Popular Categories</h2>
+            <button className="flex items-center text-green-600 hover:text-green-700 font-medium">
+              View All <FiArrowRight className="ml-2" />
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {categories.map((category, index) => (
+              <motion.div
+                key={category}
+                variants={itemVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                onClick={() => setActiveCategory(category === activeCategory ? "all" : category)}
+                className={`bg-white rounded-xl shadow-md p-6 text-center cursor-pointer hover:shadow-lg transition-all duration-300 border-2 ${
+                  category === activeCategory ? "border-green-600" : "border-transparent"
+                }`}
+              >
+                <div className="w-14 h-14 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
+                  {categoryIcons[category] || <BiLeaf className="w-6 h-6" />}
+                </div>
+                <h3 className="text-lg font-semibold text-gray-800">{category}</h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  {remedies.filter(r => r.category === category).length} remedies
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Results Count */}
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold text-amber-800">
+            {activeCategory !== "all" ? activeCategory : "All Remedies"}
+            {activeDosha !== "all" && ` for ${activeDosha.charAt(0).toUpperCase() + activeDosha.slice(1)}`}
+          </h2>
+          <p className="text-gray-600">{filteredRemedies.length} results found</p>
+        </div>
+        
+        {/* Remedies Grid */}
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {filteredRemedies.map((remedy) => (
             <motion.div
               key={remedy.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="group relative h-96 w-full"
+              variants={itemVariants}
+              className="group h-auto"
             >
               <RemedyCard
                 {...remedy}
@@ -175,23 +348,59 @@ export default function Remedies() {
               />
             </motion.div>
           ))}
-        </div>
-
+        </motion.div>
+        
         {/* Empty State */}
         {filteredRemedies.length === 0 && (
-          <div className="text-center py-16">
-            <div className="mx-auto w-20 h-20 mb-4">
-              <FiSearch className="w-20 h-20 text-gray-300" />
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-16 bg-white rounded-xl shadow-md"
+          >
+            <div className="mx-auto w-20 h-20 mb-4 text-green-200">
+              <FiSearch className="w-20 h-20 mx-auto" />
             </div>
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
               No Remedies Found
             </h3>
-            <p className="text-gray-600">
-              Try adjusting your search term to find what you're looking for.
+            <p className="text-gray-600 max-w-md mx-auto mb-6">
+              We couldn't find any remedies matching your current filters. Try adjusting your search term or filters.
             </p>
-          </div>
+            <button 
+              onClick={() => {
+                setSearchTerm("");
+                setActiveDosha("all");
+                setActiveCategory("all");
+              }}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all"
+            >
+              Reset Filters
+            </button>
+          </motion.div>
         )}
       </div>
+      
+      {/* Subscription Banner */}
+      <section className="bg-gradient-to-r from-amber-500 to-amber-600 py-12 mt-12">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between">
+            <div className="text-white mb-6 md:mb-0 text-center md:text-left">
+              <h3 className="text-2xl font-bold mb-2">Stay Updated with New Remedies</h3>
+              <p>Get weekly Ayurvedic tips and remedies delivered to your inbox</p>
+            </div>
+            <div className="flex w-full md:w-auto">
+              <input 
+                type="email" 
+                placeholder="Enter your email" 
+                className="px-4 py-3 rounded-l-lg w-full md:w-64 focus:outline-none"
+              />
+              <button className="bg-green-700 hover:bg-green-800 text-white px-6 py-3 rounded-r-lg font-medium transition-all">
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
