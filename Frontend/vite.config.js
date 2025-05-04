@@ -23,5 +23,9 @@ export default defineConfig({
         main: './index.html',
       },
     },
+    assetsDir: 'assets',
+    minify: true,
+    sourcemap: false,
   },
+  base: '/',
 })
