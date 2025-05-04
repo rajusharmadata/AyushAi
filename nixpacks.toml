@@ -1,0 +1,18 @@
+[build]
+image = "node:18"
+
+[build.dependencies]
+"nodejs" = ""
+
+[build.steps]
+"install" = "npm install"
+"build" = "npm run build"
+
+[run]
+command = "npm start"
+
+[env]
+NODE_ENV = "production"
+PORT = "3000"
+MONGODB_URI = ""
+JWT_SECRET = ""

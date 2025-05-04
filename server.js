@@ -22,9 +22,10 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/practitioners', practitionerRoutes);
 
 // Connect to MongoDB Atlas
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://ayushshoundik26:ayush1234@ayushai.6cw8xkd.mongodb.net/', {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000
 })
 .then(() => console.log('MongoDB Atlas connected'))
 .catch(err => console.error('MongoDB Atlas connection error:', err));
@@ -38,7 +39,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
