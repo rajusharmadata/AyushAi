@@ -1,0 +1,14 @@
+[app]
+name = "ayushai-backend"
+
+[env]
+NODE_ENV = "production"
+PORT = "3000"
+MONGODB_URI = ""
+JWT_SECRET = ""
+
+[build]
+command = "npm install"
+
+[start]
+command = "npm start"
