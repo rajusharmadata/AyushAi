@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+# Local Netlify folder
+.netlify
+=======
 # Logs
 logs
 *.log
@@ -63,3 +67,4 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+>>>>>>> 85ac7e5 (Initial commit)
