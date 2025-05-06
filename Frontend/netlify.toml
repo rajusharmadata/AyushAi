@@ -1,12 +1,26 @@
 [build]
-  publish = "dist"
   command = "npm install && npm run build"
-
+  publish = "dist"
+  
 [build.environment]
+  # Use Node.js 20 LTS
   NODE_VERSION = "20.11.1"
   NPM_VERSION = "10.2.4"
   PYTHON_VERSION = "3.9"
+  # Ensure legacy OpenSSL provider is available
   NODE_OPTIONS = "--openssl-legacy-provider"
+  # Force Yarn to use the correct Node version
+  YARN_NODE_LINKER = "node-modules"
+  # Ensure correct Node version is used
+  NVM_NODEJS_ORG_MIRROR = "https://nodejs.org/dist"
+  NVM_DIR = "$NETLIFY_BUILD_BASE/cache/nvm"
+  NVM_IOJS_ORG_MIRROR = "https://iojs.org/dist"
+  
+[build.processing]
+  skip_processing = true
+
+[functions]
+  node_bundler = "esbuild"
 
 [[redirects]]
   from = "/*"
