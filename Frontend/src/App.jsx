@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import ForgetPassword from "./pages/ForgetPassword";
 import NotFound from "./pages/NotFound";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Profile from "./pages/Profile";
 
 
 function Layout() {
@@ -30,6 +31,7 @@ function Layout() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgetPassword />} />
+        <Route path="/profile" element={<Profile />} />
         {/* Add more routes as needed */}
         {/* Catch-all route for 404 Not Found */}
         <Route path="*" element={<NotFound />} />

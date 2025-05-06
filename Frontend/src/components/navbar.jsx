@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Home, Activity, Users, LogOut } from "lucide-react";
+import { Menu, X, Home, Activity, Users, LogOut, User, ChevronDown } from "lucide-react";
 import AyushAI from "../assets/Ayushai.png";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -36,11 +38,21 @@ export default function Navbar() {
     
     window.addEventListener("scroll", handleScroll, { passive: true });
     
+    // Close profile dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (isProfileDropdownOpen && !event.target.closest('.profile-dropdown')) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    
     // Clean up
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isProfileDropdownOpen]);
 
   // Function to check if user is logged in
   const checkUserLoggedIn = () => {
@@ -51,18 +63,21 @@ export default function Navbar() {
     if (token) {
       setIsLoggedIn(true);
       
-      // If user data exists, get the username
+      // If user data exists, get the username and email
       if (userData) {
         try {
           const user = JSON.parse(userData);
           setUsername(user.name || user.username || "User");
+          setUserEmail(user.email || "user@example.com");
         } catch (error) {
           setUsername("User");
+          setUserEmail("user@example.com");
         }
       }
     } else {
       setIsLoggedIn(false);
       setUsername("");
+      setUserEmail("");
     }
   };
 
@@ -75,6 +90,8 @@ export default function Navbar() {
     // Update state
     setIsLoggedIn(false);
     setUsername("");
+    setUserEmail("");
+    setIsProfileDropdownOpen(false);
     
     // Close menu
     setIsMenuOpen(false);
@@ -85,6 +102,40 @@ export default function Navbar() {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleProfileDropdown = () => {
+    setIsProfileDropdownOpen(!isProfileDropdownOpen);
+  };
+
+  // Get the first letter of the email for the avatar
+  const getAvatarLetter = () => {
+    if (userEmail && userEmail.length > 0) {
+      return userEmail[0].toUpperCase();
+    }
+    return "U";
+  };
+
+  // Generate a consistent background color based on the email
+  const getAvatarBgColor = () => {
+    if (!userEmail) return "bg-green-500";
+    
+    // Simple hash function to get a consistent color
+    let hash = 0;
+    for (let i = 0; i < userEmail.length; i++) {
+      hash = userEmail.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    // List of background color classes
+    const bgColors = [
+      "bg-blue-500", "bg-green-500", "bg-purple-500", 
+      "bg-amber-500", "bg-emerald-500", "bg-indigo-500",
+      "bg-pink-500", "bg-teal-500", "bg-cyan-500"
+    ];
+    
+    // Use the hash to select a color
+    const colorIndex = Math.abs(hash) % bgColors.length;
+    return bgColors[colorIndex];
   };
 
   const navLinks = [
@@ -149,17 +200,42 @@ export default function Navbar() {
               ))}
             </div>
 
-            {/* Desktop Login/Signup Buttons */}
+            {/* Desktop Login/Signup Buttons or User Profile */}
             <div className="hidden md:flex items-center space-x-4">
               {isLoggedIn ? (
-                <button 
-                  onClick={handleLogout}
-                  className="flex items-center space-x-2 relative overflow-hidden border border-red-500 text-red-600 px-5 py-2 rounded-md transition-all duration-300 hover:shadow-md hover:bg-red-50 group"
-                >
-                  <LogOut className="h-4 w-4 text-red-500" />
-                  <span className="relative z-10">Logout</span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-red-100 to-red-50 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500"></span>
-                </button>
+                <div className="relative profile-dropdown">
+                  <button 
+                    onClick={toggleProfileDropdown}
+                    className="flex items-center space-x-3 px-3 py-2 rounded-full transition-all duration-300 hover:bg-white/70 group border border-transparent hover:border-gray-200 hover:shadow-sm"
+                  >
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-medium text-lg shadow-md ${getAvatarBgColor()} transition-transform duration-300 group-hover:scale-105`}>
+                      {getAvatarLetter()}
+                    </div>
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-gray-800">{username}</p>
+                      <p className="text-xs text-gray-500 truncate max-w-[150px]">{userEmail}</p>
+                    </div>
+                    <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform duration-300 ${isProfileDropdownOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  
+                  {/* Profile Dropdown */}
+                  {isProfileDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-gray-100 animate-fadeIn z-50">
+                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-green-50 flex items-center space-x-2">
+                        <User className="h-4 w-4 text-green-600" />
+                        <span>My Profile</span>
+                      </Link>
+                      <div className="border-t border-gray-100 my-1"></div>
+                      <button 
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2"
+                      >
+                        <LogOut className="h-4 w-4 text-red-500" />
+                        <span>Logout</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="flex items-center space-x-3">
                   <Link to="/login">
@@ -180,17 +256,39 @@ export default function Navbar() {
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
-              <button 
-                onClick={toggleMenu} 
-                aria-label="Toggle menu"
-                className="p-2 rounded-full bg-white/80 hover:bg-gray-100 transition-colors duration-300 border border-gray-200 shadow-sm"
-              >
-                {isMenuOpen ? (
-                  <X className="h-5 w-5 text-amber-700" />
-                ) : (
-                  <Menu className="h-5 w-5 text-green-600" />
-                )}
-              </button>
+              {isLoggedIn ? (
+                <div className="flex items-center space-x-3">
+                  <div 
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-white font-medium shadow-md ${getAvatarBgColor()}`}
+                    onClick={toggleMenu}
+                  >
+                    {getAvatarLetter()}
+                  </div>
+                  <button 
+                    onClick={toggleMenu} 
+                    aria-label="Toggle menu"
+                    className="p-2 rounded-full bg-white/80 hover:bg-gray-100 transition-colors duration-300 border border-gray-200 shadow-sm"
+                  >
+                    {isMenuOpen ? (
+                      <X className="h-5 w-5 text-amber-700" />
+                    ) : (
+                      <Menu className="h-5 w-5 text-green-600" />
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <button 
+                  onClick={toggleMenu} 
+                  aria-label="Toggle menu"
+                  className="p-2 rounded-full bg-white/80 hover:bg-gray-100 transition-colors duration-300 border border-gray-200 shadow-sm"
+                >
+                  {isMenuOpen ? (
+                    <X className="h-5 w-5 text-amber-700" />
+                  ) : (
+                    <Menu className="h-5 w-5 text-green-600" />
+                  )}
+                </button>
+              )}
             </div>
           </div>
 
@@ -203,6 +301,20 @@ export default function Navbar() {
             }`}
           >
             <div className="py-4 space-y-2 border-t border-green-100 mt-3 bg-white/50 backdrop-blur-sm rounded-xl shadow-sm">
+              {/* User Info for Mobile (when logged in) */}
+              {isLoggedIn && (
+                <div className="flex items-center space-x-3 px-4 py-3 mb-2 border-b border-green-100">
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-medium text-xl shadow-md ${getAvatarBgColor()}`}>
+                    {getAvatarLetter()}
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-800">{username}</p>
+                    <p className="text-sm text-gray-500 truncate max-w-[200px]">{userEmail}</p>
+                  </div>
+                </div>
+              )}
+              
+              {/* Navigation Links */}
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
@@ -218,6 +330,18 @@ export default function Navbar() {
                   <span className="font-medium">{link.name}</span>
                 </Link>
               ))}
+              
+              {/* Profile link for mobile when logged in */}
+              {isLoggedIn && (
+                <Link
+                  to="/profile"
+                  className="flex items-center space-x-3 mx-2 px-4 py-3 rounded-lg transition-all duration-300 text-gray-700 hover:text-amber-800 hover:bg-amber-50/70"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <User className="h-5 w-5 text-gray-500" />
+                  <span className="font-medium">My Profile</span>
+                </Link>
+              )}
               
               {/* Auth Buttons (Mobile) */}
               <div className="mt-4 pt-4 border-t border-green-100 space-y-3 px-4">
