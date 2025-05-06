@@ -1,13 +1,17 @@
 import React, { useState } from "react";
+import Ajith from "../assets/Ajit.png";
+import Kalpna from "../assets/Dr-Kalpna.jpg";
+import Shanvas from "../assets/Dr.Shanvas.jpeg";
+import DrZankar from "../assets/Dr.Zankhan.jpeg";
 import { FiPhone, FiMapPin, FiStar, FiSearch, FiFilter, FiUser, FiCalendar } from "react-icons/fi";
 
 // Sample practitioner data - you should replace this with your actual data
 const practitioners = [
   {
     id: 1,
-    name: "Dr. Ananya Sharma",
-    image: "/api/placeholder/400/400",
-    specialization: "Panchakarma Therapy",
+    name: "Dr.Ajith",
+    image: Ajith,
+    specialization: "Ayurvedic Medicine",
     experience: "15",
     rating: 4.9,
     reviews: 127,
@@ -17,8 +21,8 @@ const practitioners = [
   },
   {
     id: 2,
-    name: "Dr. Rajesh Patel",
-    image: "/api/placeholder/400/400",
+    name: "Dr. kalpna ",
+    image: Kalpna,
     specialization: "Herbal Medicine",
     experience: "12",
     rating: 4.7,
@@ -29,8 +33,8 @@ const practitioners = [
   },
   {
     id: 3,
-    name: "Dr. Meena Gupta",
-    image: "/api/placeholder/400/400",
+    name: "Dr. Shanvas",
+    image: Shanvas,
     specialization: "Yoga Therapy",
     experience: "10",
     rating: 4.8,
@@ -41,8 +45,8 @@ const practitioners = [
   },
   {
     id: 4,
-    name: "Dr. Vivek Malhotra",
-    image: "/api/placeholder/400/400",
+    name: "Dr. Zankhan",
+    image: DrZankar,
     specialization: "Diet Consultation",
     experience: "8",
     rating: 4.6,
@@ -50,31 +54,8 @@ const practitioners = [
     location: "Delhi, NCR",
     phone: "+91 76543 21098",
     about: "Expert in Ayurvedic nutrition and dietary protocols for various health conditions."
-  },
-  {
-    id: 5,
-    name: "Dr. Sunita Reddy",
-    image: "/api/placeholder/400/400",
-    specialization: "Panchakarma Therapy",
-    experience: "20",
-    rating: 4.9,
-    reviews: 156,
-    location: "Kochi, Kerala",
-    phone: "+91 65432 10987",
-    about: "With two decades of experience in authentic Kerala Panchakarma treatments."
-  },
-  {
-    id: 6,
-    name: "Dr. Karthik Iyer",
-    image: "/api/placeholder/400/400",
-    specialization: "Herbal Medicine",
-    experience: "14",
-    rating: 4.7,
-    reviews: 103,
-    location: "Chennai, Tamil Nadu",
-    phone: "+91 54321 09876",
-    about: "Specializes in rare herbs and their applications in treating chronic conditions."
   }
+
 ];
 
 const PractitionerCard = ({ practitioner }) => {
