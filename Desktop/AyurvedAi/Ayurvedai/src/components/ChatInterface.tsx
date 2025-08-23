@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
+import { Button } from './ui/button';
 import { MenuIcon } from 'lucide-react';
 import ChatSidebar from './ChatSidebar';
 import ChatMessage from './ChatMessage';
