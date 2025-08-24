@@ -27,7 +27,7 @@ const ChatInterface: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>([
     {
       id: '1',
-      title: 'Welcome to ChatGPT',
+      title: 'Welcome to Ayurved Ai',
       lastMessage: 'Hello! How can I help you today?',
       timestamp: new Date().toISOString(),
       messages: [
@@ -182,7 +182,7 @@ const ChatInterface: React.FC = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className='flex-1 flex flex-col min-w-0'>
+      <div className='flex-1 flex flex-col min-w-0  '>
         {/* Mobile Header */}
         <div className='lg:hidden flex items-center justify-between p-4 border-b border-border'>
           <Button
@@ -198,13 +198,13 @@ const ChatInterface: React.FC = () => {
         </div>
 
         {/* Messages */}
-        <ScrollArea className='flex-1' ref={scrollAreaRef}>
+        <ScrollArea className='flex-1 overflow-auto ' ref={scrollAreaRef}>
           <div className='max-w-4xl mx-auto px-4 lg:px-0'>
             {messages.length === 0 ? (
               <div className='flex items-center justify-center h-full min-h-[60vh]'>
                 <div className='text-center px-4'>
                   <h1 className='text-2xl lg:text-3xl font-semibold text-foreground mb-4'>
-                    How can I help you today?
+                    I am AyurvedAI How can I help you today?
                   </h1>
                   <p className='text-muted-foreground text-sm lg:text-base'>
                     Start a conversation by typing a message below.
